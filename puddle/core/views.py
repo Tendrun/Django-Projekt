@@ -1,4 +1,5 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth import logout
 
 from item.models import Category, Item
 
@@ -15,8 +16,28 @@ def index(request):
     })
 
 
+def category_detail_view(request, category_id):
+    category = get_object_or_404(Category, id=category_id)
+    items = category.items.all()
+    return render(request, 'core/category/category_detail.html', {
+        'category': category, 'items': items
+    })
+
+
 def contact(request):
     return render(request, 'core/contact.html')
+
+
+def about(request):
+    return render(request, 'core/about.html')
+
+
+def privacy(request):
+    return render(request, 'core/privacy.html')
+
+
+def termofuse(request):
+    return render(request, 'core/termofuse.html')
 
 
 def signup(request):
@@ -33,3 +54,8 @@ def signup(request):
     return render(request, 'core/signup.html', {
         'form': form
     })
+
+
+def logout_view(request):
+    logout(request)
+    return redirect('/')
